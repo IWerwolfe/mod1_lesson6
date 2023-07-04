@@ -25,7 +25,7 @@ public class BookShelfController {
 
     @GetMapping("/shelf")
     public String books(Model model) {
-        logger.info("got book shelf");
+        logger.info(this.toString());
         model.addAttribute("book", new Book());
         model.addAttribute("bookList", bookService.getAllBooks());
         return "book_shelf";
@@ -43,11 +43,11 @@ public class BookShelfController {
     }
 
     @PostMapping("/remove")
-    public String removeBook(@RequestParam(value = "bookIdToRemove", defaultValue = "0") Integer bookIdToRemove,
+    public String removeBook(@RequestParam(value = "bookIdToRemove", defaultValue = "") String bookIdToRemove,
                              @RequestParam(value = "bookAuthorToRemove", defaultValue = "") String bookAuthorToRemove,
                              @RequestParam(value = "bookTitleToRemove", defaultValue = "") String bookTitleToRemove) {
 
-        if (bookIdToRemove != 0 && bookService.removeBookById(bookIdToRemove)) {
+        if (!bookIdToRemove.isEmpty() && bookService.removeBookById(bookIdToRemove)) {
             return "redirect:/books/shelf";
         }
         if (!bookAuthorToRemove.isEmpty() && bookService.removeItemByAuthor(bookAuthorToRemove.trim())) {
